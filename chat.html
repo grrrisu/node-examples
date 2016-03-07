@@ -1,0 +1,31 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <div id="messages">
+    </div>
+    <input type="text" value="" id="chat-message"/>
+    <button type="submit" id="submit-button">Send</button>
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect("http://localhost:8080");
+
+      socket.on("connect", function(data){
+        console.log("connected to server");
+        var username = prompt("Enter your username");
+        socket.emit("join", username);
+      });
+
+      socket.on("message", function(data){
+        $('#messages').append('<div class="message">'+data.message+'</div>');
+      });
+
+      $('#submit-button').on('click', function(e){
+        var message = $('#chat-message').val();
+        socket.emit("message", {message: message});
+      });
+
+    </script>
+  </body>
+</html>
