@@ -1,0 +1,5 @@
+source 'http://rubygems.org'
+
+gem 'celluloid-io', '~> 0.16.0'
+
+gem 'byebug'

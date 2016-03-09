@@ -1,0 +1,23 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    byebug (8.2.2)
+    celluloid (0.16.0)
+      timers (~> 4.0.0)
+    celluloid-io (0.16.2)
+      celluloid (>= 0.16.0)
+      nio4r (>= 1.1.0)
+    hitimes (1.2.3)
+    nio4r (1.2.1)
+    timers (4.0.4)
+      hitimes
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  byebug
+  celluloid-io (~> 0.16.0)
+
+BUNDLED WITH
+   1.11.2

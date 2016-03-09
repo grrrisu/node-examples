@@ -1,1 +1,5 @@
 node_modules/**/*
+
+pong.sock
+
+.byebug_history
