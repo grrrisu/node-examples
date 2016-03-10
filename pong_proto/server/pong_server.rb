@@ -2,13 +2,11 @@ class PongServer
   include Celluloid::IO
   finalizer :shutdown
 
-  def initialize(file)
+  def initialize(file, start: false)
     @file = file
     puts "server on #{file}"
     @server = UNIXServer.new(file)
-    # at_exit do
-    #   terminate
-    # end
+    boot if start
   end
 
   def boot
@@ -17,30 +15,30 @@ class PongServer
   end
 
   def shutdown
+    puts "shutting down ..."
     @server.close if @server
     FileUtils.rm @file, force: true
   end
 
   def run
-    loop do
+    begin
       print '.'
       async.handle_connection @server.accept
-    end
+    end until @server.closed?
   end
 
   def handle_connection(socket)
-    _, port, host = socket.peeraddr
-    puts "*** Received connection from #{host}:#{port}"
+    puts "*** client connection"
     listen(socket)
   rescue EOFError
-    puts "*** #{host}:#{port} disconnected"
+    puts "*** client disconnected"
     socket.close
   end
 
   def listen(socket)
-    loop do
+    begin
       socket.write socket.readpartial(4096)
-    end
+    end until @server.closed?
   end
 
 end

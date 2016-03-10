@@ -3,6 +3,8 @@ require 'celluloid/io'
 require 'byebug'
 
 require_relative 'pong_server'
+require_relative 'master'
 
-PongServer.new('pong.sock').boot
-sleep
+Master.run # in the forground
+# PongServer.new('pong.sock').boot
+# sleep
