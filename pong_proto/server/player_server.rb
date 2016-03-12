@@ -36,16 +36,20 @@ class PlayerServer
     info "client disconnected"
     socket.close
   rescue StandardError => e
-    puts "\e[0;31mconnection for player #{connection.player.try(:id)} crashed!: \n #{e.message}"
-    puts e.backtrace.join("\n") unless SIM_ENV == 'test'
-    puts "\e[0m"
+    #puts "\e[0;31mconnection for player #{connection.player.try(:id)} crashed!: \n #{e.message}"
+    #puts e.backtrace.join("\n") unless SIM_ENV == 'test'
+    #puts "\e[0m"
     raise
   end
 
   def listen(socket)
     begin
-      socket.write socket.readpartial(4096)
-    end until @server.closed?
+      data = socket.read
+      info "received data"
+      info data
+      info data.class.name
+      socket.print data
+    end until data.empty? && socket.eof?
   end
 
 end

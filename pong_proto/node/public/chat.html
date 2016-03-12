@@ -18,6 +18,7 @@
 
       socket.on("action", function(data){
         console.log(data);
+        console.log(JSON.parse(data));
         $('#messages').append('<div class="message">'+data.toString()+'</div>');
       });
 

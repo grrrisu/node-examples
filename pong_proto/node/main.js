@@ -18,8 +18,8 @@ io.on("connection", function(client){
   });
 
   client.on("action", function(data){
-    console.log("message received " + data.message);
-    serverConnection.write(data.message);
+    console.log("message received ", data);
+    serverConnection.write(JSON.stringify(data)+"\r\n");
   });
 
   client.on("disconnect", function(data){
