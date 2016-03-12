@@ -1,5 +1,5 @@
 node_modules/**/*
 
-pong.sock
+player.sock
 
 .byebug_history

@@ -21,9 +21,15 @@
         $('#messages').append('<div class="message">'+data.toString()+'</div>');
       });
 
+      socket.on("end", function(){
+        console.log("reloading");
+        window.location.href("http://localhost:8080");
+      });
+
       $('#submit-button').on('click', function(e){
         var message = $('#chat-message').val();
-        socket.emit("action", {message: message});
+        action = {"scope": "test", "action": "reverse", "args": message }
+        socket.emit("action", action);
       });
 
     </script>

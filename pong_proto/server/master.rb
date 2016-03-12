@@ -1,3 +1,3 @@
 class Master < Celluloid::SupervisionGroup
-  supervise PongServer, as: :pong_server, args: ['pong.sock', {start: true}]
+  supervise PlayerServer, as: :player_server, args: ['player.sock', {start: true}]
 end

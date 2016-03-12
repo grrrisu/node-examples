@@ -1,4 +1,4 @@
-### Debug PongServer
+### Debug PlayerServer
 
 test unix socket with netcat:
 

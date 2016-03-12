@@ -9,7 +9,7 @@ const unix_socket = require('./unix_socket');
 io.on("connection", function(client){
   console.log("browser connected");
 
-  let serverConnection = unix_socket.connect('../server/pong.sock');
+  let serverConnection = unix_socket.connect('../server/player.sock');
 
   client.on("join", function(player_id, player_token){
     console.log(player_id + " : " + player_token + " joined");
@@ -29,6 +29,6 @@ io.on("connection", function(client){
 });
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/chat.html');
+  res.sendFile(__dirname + '/public/chat.html');
 });
 server.listen(8080);
