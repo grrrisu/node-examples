@@ -1,3 +1,4 @@
+require 'json'
 require 'fileutils'
 require 'celluloid/io'
 require 'byebug'

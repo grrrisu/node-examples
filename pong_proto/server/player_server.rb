@@ -48,8 +48,12 @@ class PlayerServer
       info "received data"
       info data
       info data.class.name
+      info JSON.parse(data, symbolize_names: true)
       socket.print data
     end until data.empty? && socket.eof?
+  ensure
+    info "socket closed"
+    socket.close
   end
 
 end

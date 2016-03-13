@@ -24,12 +24,12 @@
 
       socket.on("end", function(){
         console.log("reloading");
-        window.location.href("http://localhost:8080");
+        window.location.href = window.location.href;
       });
 
       $('#submit-button').on('click', function(e){
         var message = $('#chat-message').val();
-        action = {"scope": "test", "action": "reverse", "args": message }
+        action = {"scope": "te\r\nst", "action": "reverse", "args": message }
         socket.emit("action", action);
       });
 
