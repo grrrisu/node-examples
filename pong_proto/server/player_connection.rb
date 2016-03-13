@@ -23,8 +23,14 @@ class PlayerConnection
     info "received data"
     info data
     info data.class.name
-    info JSON.parse(data, symbolize_names: true)
+    data = JSON.parse(data, symbolize_names: true)
+    info data
+    # raise "OH SHIT!!!"
     socket.print data
+  rescue StandardError => e
+    message = {exception: e.class.name, message: e.message, data: data}
+    socket.print message.to_json
+    raise
   end
 
   def shutdown
