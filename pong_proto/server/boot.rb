@@ -3,6 +3,7 @@ require 'fileutils'
 require 'celluloid/io'
 require 'byebug'
 
+require_relative 'player_connection'
 require_relative 'player_server'
 require_relative 'master'
 
