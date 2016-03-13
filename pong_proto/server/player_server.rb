@@ -32,14 +32,14 @@ class PlayerServer
   def handle_connection(socket)
     info "client connected"
     listen(socket)
-  rescue EOFError
-    info "client disconnected"
-    socket.close
   rescue StandardError => e
-    #puts "\e[0;31mconnection for player #{connection.player.try(:id)} crashed!: \n #{e.message}"
-    #puts e.backtrace.join("\n") unless SIM_ENV == 'test'
-    #puts "\e[0m"
+    puts "\e[0;31mconnection for player crashed!: \n #{e.message}"
+    puts e.backtrace.join("\n") unless SIM_ENV == 'test'
+    puts "\e[0m"
     raise
+  ensure
+    info "socket closed"
+    socket.close
   end
 
   def listen(socket)
@@ -51,9 +51,7 @@ class PlayerServer
       info JSON.parse(data, symbolize_names: true)
       socket.print data
     end until data.empty? && socket.eof?
-  ensure
-    info "socket closed"
-    socket.close
+    info "client disconnected"
   end
 
 end
