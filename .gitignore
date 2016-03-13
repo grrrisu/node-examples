@@ -3,3 +3,4 @@ node_modules/**/*
 player.sock
 
 .byebug_history
+pong_proto/node/node_modules/**/*

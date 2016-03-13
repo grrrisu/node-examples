@@ -2,15 +2,18 @@
 
 const net = require('net');
 
-exports.connect = function(file) {
+exports.connect = function(file, callback) {
 
-  let client = net.connect({path: file}, function(){
+  let client = net.connect({path: file});
+
+  client.on("connect", function(){
     console.log("connected to server");
+    callback(null, client);
   });
 
   client.on("error", function(err){
     console.log(err);
-    throw err;
+    callback(err, null);
   });
 
   client.on("data", function(data){
@@ -21,8 +24,7 @@ exports.connect = function(file) {
   client.on("end", function(){
     console.log("server disconnected");
     client.browserConnection.emit("end");
+    client.browserConnection.serverConnection = null;
   });
-
-  return client;
 
 };
