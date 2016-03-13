@@ -17,7 +17,6 @@
       });
 
       socket.on("action", function(data){
-        console.log(data);
         console.log(JSON.parse(data));
         $('#messages').append('<div class="message">'+data.toString()+'</div>');
       });
@@ -25,6 +24,10 @@
       socket.on("end", function(){
         console.log("reloading");
         window.location.href = window.location.href;
+      });
+
+      socket.on("net-status", function(data){
+        $('#messages').append('<div class="message">'+data.message+'</div>');
       });
 
       $('#submit-button').on('click', function(e){

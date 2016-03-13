@@ -17,10 +17,12 @@ exports.connect = function(server){
       operation.attempt(function(currentAttempt){
         unix_socket.connect('../server/player.sock', (err, socket) => {
           if(operation.retry(err)){
+            client.emit("net-status", {message: "sim server is not available", error: err});
             return;
           } else {
             serverConnection = socket;
             serverConnection.browserConnection = client;
+            client.emit("net-status", {message: "connected to sim server", error: null});
           }
         });
 
