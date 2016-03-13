@@ -13,7 +13,7 @@ class PlayerConnection
   def listen
     begin
       data = socket.read
-      process data
+      process data unless data.empty?
     end until data.empty? && socket.eof?
     info "client disconnected"
     shutdown
