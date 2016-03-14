@@ -17,8 +17,9 @@
       });
 
       socket.on("action", function(data){
-        console.log(JSON.parse(data));
-        $('#messages').append('<div class="message">'+data.toString()+'</div>');
+        data = JSON.parse(data);
+        console.log("data received", data);
+        $('#messages').append('<div class="message">'+data.answer+'</div>');
       });
 
       socket.on("end", function(){
@@ -32,7 +33,7 @@
 
       $('#submit-button').on('click', function(e){
         var message = $('#chat-message').val();
-        action = {"scope": "te\r\nst", "action": "reverse", "args": message }
+        action = {"scope": "test", "action": "reverse", "args": message }
         socket.emit("action", action);
       });
 

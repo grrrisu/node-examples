@@ -11,6 +11,7 @@ class Player
   def initialize id
     info "player init with #{id}"
     @id = id
+    create_handlers
   end
 
   def shutdown
@@ -21,8 +22,19 @@ class Player
 
   def receive message
     info "player[#{id}] received message #{message}"
-    #raise "Oh Snap!!!"
-    connection.send(message)
+    answer = get_handler(message[:scope]).dispatch(message)
+    connection.send({scope: message[:scope], action: message[:action], answer: answer})
+  end
+
+private
+
+  def create_handlers
+    @message_handlers = {}
+    @message_handlers[:test] = MessageHandler::Test.new(self)
+  end
+
+  def get_handler scope
+    @message_handlers[scope.to_sym]
   end
 
 end

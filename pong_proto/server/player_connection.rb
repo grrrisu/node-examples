@@ -1,3 +1,5 @@
+# the player actor is linked with its connection
+# if one of the two crashes the other crashes as well
 class PlayerConnection
   include Celluloid
   include Celluloid::Logger
@@ -16,6 +18,7 @@ class PlayerConnection
       receive data unless data.empty?
     end until data.empty? && socket.eof?
     info "client disconnected"
+    @player.terminate
     terminate
   end
 
@@ -23,8 +26,6 @@ class PlayerConnection
     message = JSON.parse(data, symbolize_names: true)
     info "received message #{message}"
     player = get_player message[:player_id]
-    # intended behaviour: if the player crashes this connection crashes too
-    raise 'Oh my dear!'
     player.receive(message)
   rescue StandardError => e
     message = {exception: e.class.name, message: e.message, data: data}
