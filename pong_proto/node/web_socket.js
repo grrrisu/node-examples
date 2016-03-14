@@ -7,12 +7,16 @@ exports.connect = function(server){
   const io = require('socket.io')(server);
   const unix_socket = require('./unix_socket');
 
+  let player_id = null;
+
   io.on("connection", function(client){
     console.log("browser connected");
     let serverConnection = null;
 
-    client.on("join", function(player_id, player_token){
-      console.log(player_id + " : " + player_token + " joined");
+    client.on("join", function(id, token){
+      console.log(id + " : " + token + " joined");
+      player_id = id;
+
       let operation = retry.operation();
       operation.attempt(function(currentAttempt){
         unix_socket.connect('../server/player.sock', (err, socket) => {
@@ -32,6 +36,7 @@ exports.connect = function(server){
     client.on("action", function(data){
       console.log("message received ", data);
       if(serverConnection) {
+        data.player_id = player_id;
         serverConnection.write(JSON.stringify(data)+"\r\n");
       } else {
         console.log("action dropped as we don't have any server connection");

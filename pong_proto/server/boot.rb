@@ -5,6 +5,8 @@ require 'byebug'
 
 require_relative 'player_connection'
 require_relative 'player_server'
+require_relative 'player'
+require_relative 'level'
 require_relative 'master'
 
 SIM_ENV = 'development'
