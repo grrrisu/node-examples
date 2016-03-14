@@ -2,6 +2,7 @@ class PlayerServer
   include Celluloid::IO
   include Celluloid::Logger
   finalizer :shutdown
+  trap_exit :player_connection_closed
 
   def initialize(file, start: false)
     @file = file
@@ -13,25 +14,32 @@ class PlayerServer
   end
 
   def boot
-    info "server listening ..."
+    info "player server listening ..."
     async.run
-  end
-
-  def shutdown
-    info "shutting down ..."
-    @server.close if @server
-    FileUtils.rm @file, force: true
   end
 
   def run
     begin
-      async.handle_connection @server.accept
+      handle_connection @server.accept
     end until @server.closed?
   end
 
   def handle_connection(socket)
     info "client connected"
-    PlayerConnection.supervise(socket, start: true)
+    connection = PlayerConnection.new_link(socket)
+    connection.async.listen
+  end
+
+  def shutdown
+    info "shutting down player server ..."
+    @server.close if @server
+    FileUtils.rm @file, force: true
+  end
+
+  def player_connection_closed(actor, reason)
+    if reason
+      warn "player connection #{actor.inspect} has died because of a #{reason.class}: #{reason.message}"
+    end
   end
 
 end

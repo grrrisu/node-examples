@@ -5,9 +5,9 @@ class PlayerConnection
 
   attr_reader :socket
 
-  def initialize(socket, start: false)
+  def initialize(socket)
+    info "starting with socket #{socket.object_id}"
     @socket = socket
-    listen if start
   end
 
   def listen
@@ -16,7 +16,7 @@ class PlayerConnection
       process data unless data.empty?
     end until data.empty? && socket.eof?
     info "client disconnected"
-    shutdown
+    terminate
   end
 
   def process(data)
@@ -26,7 +26,7 @@ class PlayerConnection
     data = JSON.parse(data, symbolize_names: true)
     info data
     # raise "OH SHIT!!!"
-    socket.print data
+    socket.print data.to_json
   rescue StandardError => e
     message = {exception: e.class.name, message: e.message, data: data}
     socket.print message.to_json
@@ -35,6 +35,7 @@ class PlayerConnection
 
   def shutdown
     socket.close if socket
+    info "socket closed"
   end
 
 end
