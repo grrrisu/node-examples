@@ -12,6 +12,10 @@ module MessageHandler
       send message[:action], *Array(message[:args])
     end
 
+    def queue event
+      Celluloid::Actor[:event_queue].async.add_event event
+    end
+
   end
 
 end

@@ -22,8 +22,13 @@ class Player
 
   def receive message
     info "player[#{id}] received message #{message}"
-    answer = get_handler(message[:scope]).dispatch(message)
-    connection.send({scope: message[:scope], action: message[:action], answer: answer})
+    if answer = get_handler(message[:scope]).dispatch(message)
+      send_message({scope: message[:scope], action: message[:action], answer: answer})
+    end
+  end
+
+  def send_message message
+    connection.send_message message
   end
 
 private

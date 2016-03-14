@@ -18,7 +18,7 @@ class PlayerConnection
       receive data unless data.empty?
     end until data.empty? && socket.eof?
     info "client disconnected"
-    @player.terminate
+    @player.terminate if @player
     terminate
   end
 
@@ -37,7 +37,7 @@ class PlayerConnection
     Celluloid::Actor[:level]
   end
 
-  def send(message)
+  def send_message(message)
     socket.print message.to_json
   end
 

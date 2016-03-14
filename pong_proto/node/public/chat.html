@@ -4,8 +4,12 @@
   <body>
     <div id="messages">
     </div>
-    <input type="text" value="" id="chat-message"/>
-    <button type="submit" id="submit-button">Send</button>
+
+    <form id="message-form">
+      <input type="text" value="" id="message"/>
+      <button type="submit" id="submit-button">Send</button>
+    </form>
+
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -31,10 +35,17 @@
         $('#messages').append('<div class="message">'+data.message+'</div>');
       });
 
-      $('#submit-button').on('click', function(e){
-        var message = $('#chat-message').val();
-        action = {"scope": "test", "action": "reverse", "args": message }
-        socket.emit("action", action);
+      var MessageController = {
+        sendMessage: function(){
+          var message = $('#message').val();
+          action = {"scope": "test", "action": "reverse", "args": message }
+          socket.emit("action", action);
+        }
+      }
+
+      $('#message-form').on('submit', function(e){
+        e.preventDefault();
+        MessageController.sendMessage();
       });
 
     </script>
