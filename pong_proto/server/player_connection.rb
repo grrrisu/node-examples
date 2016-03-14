@@ -22,7 +22,9 @@ class PlayerConnection
   def receive(data)
     message = JSON.parse(data, symbolize_names: true)
     info "received message #{message}"
-    player = level.find_or_create_player message[:player_id]
+    player = get_player message[:player_id]
+    # intended behaviour: if the player crashes this connection crashes too
+    raise 'Oh my dear!'
     player.receive(message)
   rescue StandardError => e
     message = {exception: e.class.name, message: e.message, data: data}
@@ -41,6 +43,17 @@ class PlayerConnection
   def shutdown
     socket.close if socket
     info "socket closed"
+  end
+
+  private
+
+  def get_player player_id
+    raise ArgumentError, "player_id is required" unless player_id
+    return @player if @player
+    @player = Player.new_link(player_id)
+    @player.connection = self
+    level.add_player @player
+    @player
   end
 
 end

@@ -14,17 +14,13 @@ class Level
     @players[player.id] = player
   end
 
-  def remove_player player
-    @players.delete player.id
+  def remove_player player_id
+    @players.delete player_id
+    debug "player #{player_id} removed"
   end
 
-  def find_or_create_player player_id
-    raise ArgumentError, "player_id is required" unless player_id
-    unless player = @players[player_id]
-      player = Player.new(player_id)
-      add_player player
-    end
-    player
+  def find_player player_id
+    @players[player_id]
   end
 
   def shutdown
