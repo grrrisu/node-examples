@@ -35,7 +35,7 @@ private
 
   def create_handlers
     @message_handlers = {}
-    @message_handlers[:test] = MessageHandler::Test.new(self)
+    @message_handlers[:test] = Net::MessageHandler::Test.new(self)
   end
 
   def get_handler scope
